@@ -1,0 +1,10 @@
+{
+  "clear":  {
+    "description": "Clears the display.",
+    "usage": "clear"
+  },
+  "help": {
+    "description": "Displays available commands or detailed information for a specific command.",
+    "usage": "help [command]"
+  }
+}
