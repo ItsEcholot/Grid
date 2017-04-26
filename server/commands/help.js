@@ -4,7 +4,7 @@ module.exports = function (commandArgs) {
   let returnString = '';
   if(commandArgs['_'].length === 1) {
     returnString = `
-      <b>No command as parameter provided... Displaying all available commands.</b>
+      <b>No command as parameter provided... Listing all available commands.</b>
       <ul>
     `;
     for (let key in helpFile) {
