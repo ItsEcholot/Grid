@@ -48,14 +48,14 @@ body{
   height: 100%;
   filter: blur(1px);
 
-  terminal-wrapper>.cmd{
+  /*.terminal-wrapper>.cmd {
     filter: blur(3px);
     animation:
       5s distort 6s infinite alternate,
       blur 30ms infinite,
       flick 50ms infinite,
       jump 50ms infinite;
-  }
+  }*/
 }
 
 @keyframes crt {
