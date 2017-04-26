@@ -13,9 +13,9 @@ export class AppComponent implements OnInit {
   private version = '1.0.2 Farnsworth';
   private jqueryTerminal;
   private window;
-  private socketio:SocketIO;
+  private socketio: SocketIO;
 
-  constructor(socketio:SocketIO) {
+  constructor(socketio: SocketIO) {
     this.socketio = socketio;
   }
 
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
         let startTime = Date.now();
 
         this.socketio.getSocket().on('latencyPong', (data) => {
-          let latency = Date.now() - startTime;
+          const latency = Date.now() - startTime;
           this.jqueryTerminal.echo(`
             <b>Pong</b>
             <br>
@@ -40,8 +40,7 @@ export class AppComponent implements OnInit {
         this.jqueryTerminal.pause();
         startTime = Date.now();
         this.socketio.sendMessage('latencyPing', '');
-      }
-      else if (command !== '') {
+      } else if (command !== '') {
         this.jqueryTerminal.pause();
         this.socketio.sendMessage('command', command);
       }
