@@ -11,7 +11,26 @@ module.exports = function (commandArgs) {
       returnString += `<li>${key}</li>`;
     }
 
-    returnString += '</ul>';
+    returnString += `</ul>`;
+    return returnString;
+  }
+  else  {
+    let command = helpFile[commandArgs['_'][1]];
+    if(command) {
+      returnString = `
+      <b>${commandArgs['_'][1]}</b>
+      <br>
+      &nbsp;${command.description}
+      <br>
+      &nbsp;Usage: ${command.usage}
+    `;
+    }
+    else  {
+      returnString = `
+        Command <b>${commandArgs['_'][1]}</b> not found.
+      `;
+    }
+
     return returnString;
   }
 }

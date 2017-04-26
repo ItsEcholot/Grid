@@ -6,7 +6,7 @@ const ioHandler = require('./websocketHandler');
 
 app.get('/', function (req, res) {
   res.send('API reached');
-})
+});
 
 io.on('connection', function (socket) {
   ioHandler.clientConnected(socket);

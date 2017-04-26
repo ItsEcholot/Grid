@@ -6,5 +6,13 @@
   "help": {
     "description": "Displays available commands or detailed information for a specific command.",
     "usage": "help [command]"
+  },
+  "motd": {
+    "description": "Displays the message of the day.",
+    "usage": "motd"
+  },
+  "ping": {
+    "description": "Shows the ping to the Grid backbone servers in milliseconds",
+    "usage": "ping"
   }
 }

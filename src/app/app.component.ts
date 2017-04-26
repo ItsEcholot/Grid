@@ -10,31 +10,56 @@ import 'jquery.terminal';
 })
 export class AppComponent implements OnInit {
   private title = 'Grid';
+  private version = '1.0.2 Farnsworth';
   private jqueryTerminal;
   private window;
-  private socketio: SocketIO;
+  private socketio:SocketIO;
 
-  constructor(socketio: SocketIO)  {
+  constructor(socketio:SocketIO) {
     this.socketio = socketio;
   }
 
-  ngOnInit()  {
+  ngOnInit() {
     this.jqueryTerminal = jQuery('#terminal').terminal((command) => {
-      if (command !== '') {
+      if (command === 'ping') {
+        let startTime = Date.now();
+
+        this.socketio.getSocket().on('latencyPong', (data) => {
+          let latency = Date.now() - startTime;
+          this.jqueryTerminal.echo(`
+            <b>Pong</b>
+            <br>
+            ${latency}ms
+          `, {
+            raw: true
+          });
+          this.socketio.getSocket().off('latencyPong');
+          this.jqueryTerminal.resume();
+        });
+
+        this.jqueryTerminal.pause();
+        startTime = Date.now();
+        this.socketio.sendMessage('latencyPing', '');
+      }
+      else if (command !== '') {
         this.jqueryTerminal.pause();
         this.socketio.sendMessage('command', command);
       }
     }, {
-      greetings: 'Grid OS - 1.0.1 Farnsworth',
+      greetings: `Grid OS - ${this.version}`,
       name: 'js_demo',
       prompt: '> ',
       scrollOnEcho: true,
     });
-    this.socketio.getSocket().on('response', (data) =>  {
+
+    this.jqueryTerminal.echo('<br>Connecting to backbone...', {raw: true});
+
+    this.socketio.getSocket().on('response', (data) => {
       this.receivedResponse(data);
     });
   }
-  receivedResponse(data)  {
+
+  receivedResponse(data) {
     this.jqueryTerminal.echo(data, {
       raw: true
     });
