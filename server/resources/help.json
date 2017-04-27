@@ -3,6 +3,10 @@
     "description": "Clears the display.",
     "usage": "clear"
   },
+  "exit": {
+    "description": "Logout from your account",
+    "usage": "exit"
+  },
   "help": {
     "description": "Displays available commands or detailed information for a specific command.",
     "usage": "help [command]"

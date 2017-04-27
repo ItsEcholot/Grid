@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SocketIO } from 'services/socket-io';
 import * as $ from 'jquery';
 import 'jquery.terminal';
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-root',
@@ -49,6 +50,30 @@ export class AppComponent implements OnInit {
       name: 'js_demo',
       prompt: '> ',
       scrollOnEcho: true,
+      login: (user, password, callback) => {
+        this.socketio.getSocket().on('loginChallenge', (data) =>  {
+          this.socketio.getSocket().off('loginChallenge');
+          const challenge = data.challenge;
+          const salt = data.salt;
+          this.socketio.sendMessage('login',  {
+            username: user,
+            challenge: challenge,
+            hash: CryptoJS.SHA512(user + challenge + CryptoJS.SHA512(salt + password).toString(CryptoJS.enc.Hex)).toString(CryptoJS.enc.Hex)
+          });
+        });
+        this.socketio.getSocket().on('authorization', (data) => {
+          if (data.success && data.token)  {
+            callback(data.token);
+            this.socketio.sendMessage('command', 'motd');
+          } else  {
+            callback(null);
+          }
+          this.socketio.getSocket().off('authorization');
+        });
+        this.socketio.sendMessage('requestLoginChallenge', {
+          username: user
+        });
+      }
     });
 
     this.jqueryTerminal.echo('<br>Connecting to backbone...', {raw: true});

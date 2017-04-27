@@ -11,6 +11,15 @@ module.exports = {
       username: {
         type: Sequelize.STRING
       },
+      passwordHash:  {
+        type: Sequelize.STRING
+      },
+      passwordSalt:  {
+        type: Sequelize.STRING
+      },
+      token:  {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-  ioHandler.clientConnected(socket);
+  ioHandler.clientConnected(socket, models);
   console.log('Users connected: ' + Object.keys(io.sockets.sockets).length);
 });
 
