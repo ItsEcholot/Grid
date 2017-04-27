@@ -18,7 +18,14 @@ module.exports = {
     });
 
     socket.on('command', function (data) {
-      socket.emit('response', commandHandler(minimist(data.split(' ')), socket));
+      if(data.command && data.username && data.token)  {
+        User.findOne({where: {username: data.username}}).then((user) => {
+          if(data.token === user.token)
+            socket.emit('response', commandHandler(minimist(data.command.split(' ')), socket, user));
+          else
+            socket.emit('response', 'Unauthorized');
+        });
+      }
     });
 
     socket.on('requestLoginChallenge', function (data) {

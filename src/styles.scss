@@ -1,10 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+
 body{
   margin: 0;
   overflow-x: hidden;
   //overflow-y: hidden;
   //height: 100vh;
   font-size: 1.15em;
+  font-family: Monaco, "Courier New", Courier, monospace;
 }
 
 ::selection{
@@ -18,7 +21,6 @@ body{
   min-height: calc(100vh - 100px);
   background: #252926;
   color: #c3ef8f;
-  font-family: Monaco, "Courier New", Courier, monospace;
   //animation: crt 5ms infinite;
   text-shadow:
     0 0 1px #c3ef8f,

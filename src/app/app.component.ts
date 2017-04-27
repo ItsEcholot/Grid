@@ -10,10 +10,8 @@ import * as CryptoJS from 'crypto-js';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private title = 'Grid';
-  private version = '1.0.2 Farnsworth';
+  private version = '1.1.1 Farnsworth';
   private jqueryTerminal;
-  private window;
   private socketio: SocketIO;
 
   constructor(socketio: SocketIO) {
@@ -43,50 +41,67 @@ export class AppComponent implements OnInit {
         this.socketio.sendMessage('latencyPing', '');
       } else if (command !== '') {
         this.jqueryTerminal.pause();
-        this.socketio.sendMessage('command', command);
+        this.socketio.sendMessage('command', {
+          command: command,
+          username: this.jqueryTerminal.login_name(),
+          token: this.jqueryTerminal.token()
+        });
       }
     }, {
-      greetings: `Grid OS - ${this.version}`,
+      greetings: ``,
       name: 'js_demo',
       prompt: '> ',
       scrollOnEcho: true,
-      login: (user, password, callback) => {
-        this.socketio.getSocket().on('loginChallenge', (data) =>  {
-          this.socketio.getSocket().off('loginChallenge');
-          const challenge = data.challenge;
-          const salt = data.salt;
-          this.socketio.sendMessage('login',  {
-            username: user,
-            challenge: challenge,
-            hash: CryptoJS.SHA512(user + challenge + CryptoJS.SHA512(salt + password).toString(CryptoJS.enc.Hex)).toString(CryptoJS.enc.Hex)
-          });
-        });
-        this.socketio.getSocket().on('authorization', (data) => {
-          if (data.success && data.token)  {
-            callback(data.token);
-            this.socketio.sendMessage('command', 'motd');
-          } else  {
-            callback(null);
-          }
-          this.socketio.getSocket().off('authorization');
-        });
-        this.socketio.sendMessage('requestLoginChallenge', {
-          username: user
-        });
-      }
+      login: this.login
     });
 
+    this.jqueryTerminal.echo(`<span style="color: #00ff00">Grid OS - ${this.version}</span>`, {raw: true});
     this.jqueryTerminal.echo('<br>Connecting to backbone...', {raw: true});
+    // Logout if already logged in
+    if (this.jqueryTerminal.token()) {
+      this.jqueryTerminal.logout();
+    }
 
     this.socketio.getSocket().on('response', (data) => {
       this.receivedResponse(data);
     });
   }
 
-  receivedResponse(data) {
+  private receivedResponse(data) {
     this.jqueryTerminal.echo(data, {
       raw: true
     });
     this.jqueryTerminal.resume();
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+  private login = (user, password, callback) => {
+    this.socketio.getSocket().on('loginChallenge', (data) =>  {
+      this.socketio.getSocket().off('loginChallenge');
+      const challenge = data.challenge;
+      const salt = data.salt;
+      this.socketio.sendMessage('login',  {
+        username: user,
+        challenge: challenge,
+        hash: CryptoJS.SHA512(user + challenge + CryptoJS.SHA512(salt + password).toString(CryptoJS.enc.Hex)).toString(CryptoJS.enc.Hex)
+      });
+    });
+    this.socketio.getSocket().on('authorization', (data) => {
+      if (data.success && data.token)  {
+        callback(data.token);
+        this.jqueryTerminal.clear();
+        this.socketio.sendMessage('command', {
+          command: 'motd',
+          username: this.jqueryTerminal.login_name(),
+          token: this.jqueryTerminal.token()
+        });
+        this.jqueryTerminal.set_prompt(`${this.jqueryTerminal.login_name()} >`);
+      } else  {
+        callback(null);
+      }
+      this.socketio.getSocket().off('authorization');
+    });
+    this.socketio.sendMessage('requestLoginChallenge', {
+      username: user
+    });
   }
 }
