@@ -8,7 +8,6 @@ const User = models.User;
 module.exports = {
   clientConnected: function (socket) {
     this.bindSocketCallbacks(socket);
-    //socket.emit('response', commandHandler(minimist('motd'.split(' ')), socket));
   },
   bindSocketCallbacks: function (socket) {
     let challenges = [];
@@ -74,6 +73,7 @@ module.exports = {
               username: user.username,
               token: user.token
             });
+            socket.authorizedUsername = data.username;
             challenges.splice(data.username, 1);
           }
           else {
@@ -90,6 +90,15 @@ module.exports = {
           });
         }
       });
+    });
+    socket.on('disconnect', function (data) {
+      if (socket.authorizedUsername)  {
+        User.findOne({where: {username: socket.authorizedUsername}}).then((user) => {
+          user.updateAttributes({
+            token: ''
+          });
+        });
+      }
     });
   }
 }
