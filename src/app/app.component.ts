@@ -94,7 +94,7 @@ export class AppComponent implements OnInit {
           username: this.jqueryTerminal.login_name(),
           token: this.jqueryTerminal.token()
         });
-        this.jqueryTerminal.set_prompt(`${this.jqueryTerminal.login_name()} >`);
+        this.jqueryTerminal.set_prompt(`${this.jqueryTerminal.login_name()} > `);
       } else  {
         callback(null);
       }
