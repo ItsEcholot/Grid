@@ -1,0 +1,34 @@
+@import '~bootstrap/scss/bootstrap';
+
+$terminalFontSize: 12px;
+$terminalColor: lime;
+$terminalBgColor: black;
+$terminalFocusedBgColor: #002200;
+
+input[type="text"],
+input[type="password"] {
+  background: none;
+  color: $terminalColor !important;
+  border: none;
+  padding: 0;
+  border-bottom: 1px solid $terminalColor;
+  font-size: 1.1em;
+  font-family: Monaco, "Courier New", Courier, monospace;
+}
+
+input[type="submit"] {
+  color: $terminalBgColor;
+  background-color: $terminalColor;
+  border: none;
+  font-weight: bold;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  background: $terminalFocusedBgColor !important;
+  outline: none !important;
+}
+
+.rightalign{
+  float:right;
+}
