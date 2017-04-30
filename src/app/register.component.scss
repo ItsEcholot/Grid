@@ -2,6 +2,7 @@
 
 $terminalFontSize: 12px;
 $terminalColor: lime;
+$terminalRedColor: #ff423c;
 $terminalBgColor: black;
 $terminalFocusedBgColor: #002200;
 
@@ -23,6 +24,10 @@ input[type="submit"] {
   font-weight: bold;
 }
 
+input[type="submit"]:disabled {
+  background-color: $terminalRedColor;
+}
+
 input[type="text"]:focus,
 input[type="password"]:focus {
   background: $terminalFocusedBgColor !important;
@@ -31,4 +36,11 @@ input[type="password"]:focus {
 
 .rightalign{
   float:right;
+}
+
+.available  {
+  color: $terminalColor;
+}
+.unavailable  {
+  color: $terminalRedColor;
 }

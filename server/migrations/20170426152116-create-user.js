@@ -12,11 +12,6 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      ip: {
-        allowNull: false,
-        autoIncrement: true,
-        type: Sequelize.INTEGER.UNSIGNED,
-      },
       passwordHash:  {
         allowNull: false,
         type: Sequelize.STRING

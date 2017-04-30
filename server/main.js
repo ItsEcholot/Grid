@@ -9,10 +9,6 @@ models.sequelize.sync().then(() =>  {
   console.log('DB synced');
 });
 
-app.get('/', function (req, res) {
-  res.send('API reached');
-});
-
 io.on('connection', function (socket) {
   ioHandler.clientConnected(socket, models);
   console.log('Users connected: ' + Object.keys(io.sockets.sockets).length);

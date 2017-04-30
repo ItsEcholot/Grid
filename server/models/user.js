@@ -4,7 +4,6 @@ const crypto = require('crypto');
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define('User', {
     username: DataTypes.STRING,
-    ip: DataTypes.INTEGER.UNSIGNED,
     passwordHash: DataTypes.STRING,
     passwordSalt: DataTypes.STRING,
     token: DataTypes.STRING,
@@ -13,10 +12,6 @@ module.exports = function(sequelize, DataTypes) {
       {
         unique: true,
         fields: ['username']
-      },
-      {
-        unique: true,
-        fields: ['ip']
       }
     ],
     classMethods: {
@@ -40,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     instanceMethods:  {
-      checkAuthorizationHash: (compareHash, challenge) => {
+      checkAuthorizationHash: function(compareHash, challenge)  {
         let hash = crypto.createHash('sha512');
         hash.update(this.username + challenge + this.passwordHash);
         let digestedHash = hash.digest('hex');

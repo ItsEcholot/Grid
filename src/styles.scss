@@ -206,7 +206,7 @@ $screen-background:#121010;
     }
   }
 }
-.container{
+.container, .container-fluid{
   background:$screen-background;
   position:relative;
 
@@ -240,8 +240,12 @@ $screen-background:#121010;
     pointer-events:none;
   }
 }
-#switch:checked~.container::after{
+#switch:checked~.container::after, #switch:checked~.container-fluid::after{
   animation:flicker 0.15s infinite;
+}
+#switch {
+  position: fixed;
+  z-index: 4;
 }
 
 
@@ -308,11 +312,11 @@ $screen-background:#121010;
   height:100%;
   border:none;
 }
-#switch~.container>.screen{
+#switch~.container,#switch~.container-fluid>.screen{
   animation: turn-off 0.55s $ease-out-quint;
   animation-fill-mode:forwards;
 }
-#switch:checked~.container>.screen{
+#switch:checked~.container,#switch:checked~.container-fluid>.screen{
   animation: turn-on 4s linear;
   animation-fill-mode:forwards;
 }
@@ -341,14 +345,14 @@ $screen-background:#121010;
   visibility:hidden;
   pointer-events:none;
 }
-#switch:checked~.container .overlay{
+#switch:checked~.container,#switch:checked~.container-fluid .overlay{
   animation:overlay-anim 5s linear;
   animation-fill-mode:forwards;
 }
 
 .crtFrameOverlay  {
   background-image: url('http://also.kottke.org/misc/images/apollo-tv-frame-big.png');
-  background-size: 110% 110%;
+  background-size: 110% 108%;
   background-position-x: 50%;
   background-position-y: 20%;
   pointer-events: none;
@@ -358,7 +362,7 @@ $screen-background:#121010;
   left: 0;
   right: 0;
   height: 100vh;
-  z-index: 1;
+  z-index: 3;
 }
 
 #terminal {

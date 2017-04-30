@@ -27,7 +27,7 @@ module.exports = {
       }
     });
 
-    socket.on('requestLoginChallenge', function (data) {
+    socket.on('requestLoginChallenge', (data) => {
       if(!data.username)
         return;
 
@@ -54,7 +54,7 @@ module.exports = {
         });
       });
     });
-    socket.on('login', function (data) {
+    socket.on('login', (data) => {
       if(!data.username)
         return;
 
@@ -65,13 +65,14 @@ module.exports = {
       }).then((user) => {
         if(challenges[data.username] && data.challenge && challenges[data.username] === data.challenge) {
           if(user.checkAuthorizationHash(data.hash, data.challenge)) {
+            const token = uuidV4();
             user.updateAttributes({
-              token: uuidV4()
+              token: token
             });
             socket.emit('authorization',  {
               success: true,
               username: user.username,
-              token: user.token
+              token: token
             });
             socket.authorizedUsername = data.username;
             challenges.splice(data.username, 1);
@@ -91,7 +92,39 @@ module.exports = {
         }
       });
     });
-    socket.on('disconnect', function (data) {
+    socket.on('checkUsernameAvailability', (data) => {
+      if(!data.username)
+        return;
+
+      User.findOne({where: {username: data.username}}).then((user) => {
+        socket.emit('checkUsernameAvailabilityReply', {
+          result: !user
+        });
+      });
+    });
+    socket.on('register', (data) => {
+      if(!data.username || !data.passwordHash || !data.passwordSalt)  {
+        socket.emit('registerReply', {
+          success: false
+        });
+        return;
+      }
+
+      User.findOrCreate({
+        where: {username: data.username},
+        defaults: {
+          passwordHash: data.passwordHash,
+          passwordSalt: data.passwordSalt,
+          ip: null
+        }
+      }).spread((user, created) => {
+        socket.emit('registerReply', {
+          success: created
+        });
+      });
+    });
+
+    socket.on('disconnect', (data) => {
       if (socket.authorizedUsername)  {
         User.findOne({where: {username: socket.authorizedUsername}}).then((user) => {
           user.updateAttributes({
