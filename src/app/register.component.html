@@ -19,6 +19,11 @@
             <input [(ngModel)]="user.repeatedPassword" (ngModelChange)="onPasswordChange($event)" class="form-control" type="password" name="repeatPassword" id="repeatPassword" required minlength="5">
           </div>
           <input type='submit' [disabled]="!f.valid" value='Submit'>
+          <span *ngIf="registerStatus?.success">Success!</span>
+          <span *ngIf="registerStatus?.success === false">Something went wrong...</span>
+          <div *ngIf="registerStatus?.success" class="row" style="margin-top: 20px; margin-left: 0;">
+            <a href="/" class="retroButton">Access your console</a>
+          </div>
         </form>
         </div>
       </div>

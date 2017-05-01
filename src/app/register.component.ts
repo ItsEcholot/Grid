@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit  {
     samePassword: true,
     usernameAvailable: null,
   };
+  private registerStatus;
   constructor(socketio: SocketIO) {
     this.socketIO = socketio;
   }
@@ -25,6 +26,9 @@ export class RegisterComponent implements OnInit  {
       if (this.user.username.length < 3) {
         this.user.usernameAvailable = false;
       }
+    });
+    this.socketIO.getSocket().on('registerReply', (data) => {
+      this.registerStatus = data;
     });
   }
   private onSubmitRegister()  {

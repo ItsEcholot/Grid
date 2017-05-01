@@ -24,6 +24,14 @@ input[type="submit"] {
   font-weight: bold;
 }
 
+.retroButton  {
+  color: $terminalBgColor;
+  background-color: $terminalColor;
+  border: none;
+  font-weight: bold;
+  padding: 1px 6px 1px 6px;
+}
+
 input[type="submit"]:disabled {
   background-color: $terminalRedColor;
 }

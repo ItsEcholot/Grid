@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
     indexes:  [
       {
         unique: true,
-        fields: ['username']
+        name: 'users_username',
+        fields: [sequelize.fn('lower', sequelize.col('username'))]
       }
     ],
     classMethods: {

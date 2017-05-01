@@ -54,7 +54,7 @@ export class GameComponent implements OnInit  {
       onBeforeLogin: (terminal) => {
         terminal.echo(`<span style="color: #00ff00">Grid OS - ${this.version}</span>`, {raw: true});
         terminal.echo('<br>Connecting to backbone...', {raw: true});
-        terminal.echo(`To register please visit <a href="/register" target="_blank">grid.frostbolt.ch/register</a>`, {raw: true});
+        terminal.echo(`To register please visit <a href="/register">grid.frostbolt.ch/register</a>`, {raw: true});
       }
     });
 
@@ -76,6 +76,7 @@ export class GameComponent implements OnInit  {
     window.scrollTo(0, document.body.scrollHeight);
   }
   private login = (user, password, callback) => {
+    user = user.toLowerCase();
     this.socketio.getSocket().on('loginChallenge', (data) =>  {
       this.socketio.getSocket().off('loginChallenge');
       const challenge = data.challenge;

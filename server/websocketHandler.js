@@ -18,6 +18,7 @@ module.exports = {
 
     socket.on('command', function (data) {
       if(data.command && data.username && data.token)  {
+        data.username = models.sequelize.fn('lower', data.username);
         User.findOne({where: {username: data.username}}).then((user) => {
           if(data.token === user.token)
             socket.emit('response', commandHandler(minimist(data.command.split(' ')), socket, user));
@@ -31,6 +32,7 @@ module.exports = {
       if(!data.username)
         return;
 
+      data.username = models.sequelize.fn('lower', data.username);
       User.findOne({
         where: {
           username: data.username
@@ -58,6 +60,7 @@ module.exports = {
       if(!data.username)
         return;
 
+      data.username = models.sequelize.fn('lower', data.username);
       User.findOne({
         where:  {
           username: data.username
@@ -96,6 +99,7 @@ module.exports = {
       if(!data.username)
         return;
 
+      data.username = models.sequelize.fn('lower', data.username);
       User.findOne({where: {username: data.username}}).then((user) => {
         socket.emit('checkUsernameAvailabilityReply', {
           result: !user
@@ -110,6 +114,7 @@ module.exports = {
         return;
       }
 
+      data.username = models.sequelize.fn('lower', data.username);
       User.findOrCreate({
         where: {username: data.username},
         defaults: {
